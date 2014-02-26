@@ -1,26 +1,57 @@
 var Contact = {
+  all: [],
+  initialize: function(firstName, lastName) {
+    this.firstName = firstName;
+    this.lastName = lastName; 
+    this.addresses = []; 
+    this.number = [];  
+  },
+  create: function(firstName, lastName) {
+    var contact = Object.create(Contact);
+    contact.initialize(firstName, lastName);
+    Contact.all.push(contact);
+    return contact;
+  },
+  createAddress: function(street, city, state){
+    var address = Object.create(Address.create(street, city, state));
+
+    this.addresses.push(address);
+    return address;
+  }, 
+
+  createPhone: function(number){
+    var number = Object.create(Phone.create(number));
+    
+    this.number.push(number);
+    return number;
+  }, 
+
   fullName: function() {
     return this.firstName + " " + this.lastName;
   },
-
-  // validateName: function() {
-  //   if(this.firstName === "" || this.lastName === "") {
-  //     return false;
-  //   } else {
-  //     return true;
-  //   }
-  // }
 };
 
 var Address = {
+  all: [],
+
+  initialize: function(street, city, state) {
+    this.street = street;
+    this.city = city;
+    this.state = state;
+  },
+
+  create: function(street, city, state) {
+    var address = Object.create(Address);
+    address.initialize(street, city, state);
+    Address.all.push(address);
+    return address; 
+  }, 
 
   validateAddress: function() {
     if((this.street !== "") && (this.city !== "") && (this.state !== "")) {
       return true;
     }
     else {
-      //alert("Not a valid address."); 
-
       return false;
     }
 
@@ -33,12 +64,20 @@ var Address = {
 };
 
 var Phone = {
+  initialize: function(number) {
+    this.number = number;
+  },
+
+  create: function(number) {
+    var phone = Object.create(Phone);
+    phone.initialize(number);
+    return phone;
+  },
 
   validateNumber: function() {
     if((this.number !== "") && (!(isNaN(this.number)))) {
       return true;
     } else {
-      //alert("Please enter a phone number.");
       return false;
     }
   },
@@ -47,18 +86,6 @@ var Phone = {
     return this.number;
   }
 };
-
-// var validations = function() {
-//   if(  !== "") && (this.city !== "") && (this.state !== "") && (this.number !== "") && (!(isNaN(this.number)))) {
-//     return "valid";
-//   }
-//   else {
-//     alert("Not a valid address or phone number"); 
-
-//     return false;
-//   }
-
-// };
 
 $(document).ready(function() {
   $('#add-address').click(function() {
@@ -87,15 +114,11 @@ $(document).ready(function() {
   $('form#new-contact').submit(function(event){
     event.preventDefault();
 
-
     var inputtedFirst = $('#new-first-name').val();
     var inputtedLast = $('#new-last-name').val();
 
-    var newContact = Object.create(Contact);
-    newContact.firstName = inputtedFirst;
-    newContact.lastName = inputtedLast;
+    var newContact = Contact.create(inputtedFirst ,inputtedLast);
 
-    newContact.addresses = [];
     newContact.phoneNumbers = [];
     $('.new-address').each(function() {
       var inputtedStreet = $(this).find('.new-street').val();
@@ -103,17 +126,18 @@ $(document).ready(function() {
       var inputtedState = $(this).find('.new-state').val();
       var inputtedPhone = $(this).find('.new-phone').val();
 
+      newContact.createAddress(inputtedStreet, inputtedCity, inputtedState);
+      newContact.createPhone(inputtedPhone);                    
+      // var newAddress = Object.create(Address);
+      // newAddress.street = inputtedStreet;
+      // newAddress.city = inputtedCity;
+      // newAddress.state = inputtedState;
 
-      var newAddress = Object.create(Address);
-      newAddress.street = inputtedStreet;
-      newAddress.city = inputtedCity;
-      newAddress.state = inputtedState;
+      //var newPhoneNumber = Object.create(Phone);
+      //newPhoneNumber.number = inputtedPhone;
 
-      var newPhoneNumber = Object.create(Phone);
-      newPhoneNumber.number = inputtedPhone;
-
-      newContact.addresses.push(newAddress);
-      newContact.phoneNumbers.push(newPhoneNumber);
+      // newContact.addresses.push(newAddress);
+      // newContact.phoneNumbers.push(newPhoneNumber);
     });
 
 
@@ -121,12 +145,12 @@ $(document).ready(function() {
       return address.validateAddress();
     });
 
-    var allNumbersValid = newContact.phoneNumbers.every(function(phoneNumber) {
-      return phoneNumber.validateNumber();
+    var allNumbersValid = newContact.number.every(function(num) {
+      return num.validateNumber();
     });
 
 
-    if (allAddressesValid && allNumbersValid && allNamesValid) {
+    if (allAddressesValid && allNumbersValid) {
       $('ul#contacts').append('<li><span class="contact">' + newContact.fullName() + "</span></li>");
 
       $('.contact').last().click(function() {
@@ -135,10 +159,12 @@ $(document).ready(function() {
       $('h2#contactInfo').text(newContact.fullName());
       $('.first-name').text(newContact.firstName);
       $('.last-name').text(newContact.lastName);
+      $('ul#numbers').text("");
       $('ul#addresses').text("");
 
-      newContact.phoneNumbers.forEach(function(phoneNumber) {
-        $('.phone-number').text(phoneNumber.showNumber());
+      newContact.number.forEach(function(nums) {
+        console.log(nums);
+        $('ul#numbers').append("<li>" + nums.number + "</li>");
       });
       newContact.addresses.forEach(function(address) {
         $('ul#addresses').append("<li>" + address.fullAddress() + "</li>");
