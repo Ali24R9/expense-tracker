@@ -6,7 +6,14 @@ describe('Contact', function() {
       testContact.lastName = "Pardon";
       testContact.fullName().should.equal('Dolly Pardon');
     });
-  });  
+  }); 
+  // describe('validateName', function() {
+  //   it('should check to see if the name field is empty', function() {
+  //     var testValidateName = Object.create(Contact);
+  //     testValidateName.firstName = "";
+  //     testValidateName.validateName().should.equal(false);
+  //   }); 
+  // });
 });
 
 describe('Address', function() {
@@ -43,13 +50,13 @@ describe('Phone', function() {
     it('should check to see if the phone number field is empty', function() {
       var testValidateNumber = Object.create(Phone);
       testValidateNumber.number = "";
-      testValidateNumber.validateNumber().should.equal("not valid");
+      testValidateNumber.validateNumber().should.equal(false);
     });
 
     it('should check to see that numbers are entered for the phone number', function() {
       var testValidateNumber = Object.create(Phone);
       testValidateNumber.number = "asdfsadf";
-      testValidateNumber.validateNumber().should.equal("not valid");
+      testValidateNumber.validateNumber().should.equal(false);
     });
   });
 });
