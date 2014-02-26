@@ -1,0 +1,61 @@
+body {
+  background-color: black;  
+  color:white;
+}
+/*.container {
+  width: 600px;
+  height: 700px;
+  
+  margin: 0 auto;
+  text-align: center;
+}
+#note {
+  width: 500px;
+  margin: 50px auto 0 auto;
+  background-image:url('paper.gif');
+}
+textarea {
+  width: 500px;
+  height: 150px;
+}
+#error-main {
+  display: none;
+  color: red;
+}
+.header {
+  width: 400px;
+  margin-left: 100px;
+}
+#result {
+  width: 475px;
+  height: 150px;
+  padding:20px;
+  background-color: white;
+  text-align: left;
+  margin-left: 50px;
+}
+*/
+form {
+  width: 250px;
+}
+
+#show-contact {
+  display: none;
+}
+
+.contact {
+  cursor: pointer;
+  color: green;
+}
+
+.contact:hover {
+  text-decoration: underline;
+}
+
+@media(max-width 600px) {
+
+}
+
+.color {
+  color: white;
+}
